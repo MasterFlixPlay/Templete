@@ -5,227 +5,293 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 <meta name="theme-color" content="{{bg_color}}" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="{{app_name}}" />
-<link rel="apple-touch-icon" href="https://i.ibb.co/7t6BpWkN/Canais.png" />
-<title>{{app_name}} — Player</title>
-<link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"{{app_name}}","short_name":"App","start_url":".","display":"standalone","background_color":"{{bg_color}}","theme_color":"{{primary_color}}"}' />
+<title>{{app_name}}</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@8.17.4/dist/video-js.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/video.js@8.17.4/dist/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-/* =========================================
-   BASE DO SISTEMA (Nunca muda)
-   ========================================= */
 :root{
   --pink-neon: {{primary_color}};
-  --bg-app: {{bg_color}};
+  --pink: {{primary_color}};
+  --bg-grad: radial-gradient(ellipse at top,#3a0a4a 0%,#1a0524 40%, {{bg_color}} 100%);
   --glass: rgba(255,255,255,.06);
-  --glass-strong: rgba(255,255,255,.10);
   --glass-border: rgba(255,255,255,.10);
-  --shadow-neon: 0 0 20px rgba({{primary_color_rgb}}, .4);
-  --radius: 16px;
+  --shadow-neon: 0 0 24px rgba(255,45,146,.45);
   --txt: #fff;
-  --txt-muted: rgba(255,255,255,.62);
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow-x:hidden}
-body{ margin:0; font-family:'Inter',system-ui,sans-serif; color:var(--txt); background:var(--bg-app); background-attachment:fixed; padding-bottom:env(safe-area-inset-bottom); min-height:100vh; }
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Inter',sans-serif;color:var(--txt);background:var(--bg-grad);padding-bottom:env(safe-area-inset-bottom);}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(255,45,146,.18),transparent 40%);}
 
-.app-shell{position:relative;z-index:1;min-height:100vh}
+/* Login */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:url('https://i.ibb.co/dJfWsVB3/ac137247-31dd-4512-b457-550266c7698f.png') center/cover no-repeat;}
+.login-card{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);border-radius:24px;padding:2rem;max-width:400px;width:100%;}
+.login-brand{text-align:center;font-family:'Dancing Script',cursive;font-size:3rem;color:var(--pink-neon);text-shadow:0 0 20px rgba(255,45,146,.7);}
 
-/* LOGIN - PADRÃO */
-.login-page{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.2rem; background: var(--bg-app); }
-.login-card{width:100%;max-width:420px;padding:2rem;border-radius:24px; background:var(--glass); border:1px solid var(--glass-border);}
-.login-brand{text-align:center;margin-bottom:1.4rem}
-.login-brand .brand-title{font-size:2.5rem;font-weight:800;color:var(--pink-neon);}
-.field{position:relative;margin-bottom:.85rem}
-.field .form-control{ background:rgba(0,0,0,.4);border:1px solid var(--glass-border);color:#fff; border-radius:14px;padding:.95rem 1rem; transition:all .2s; }
-.field .form-control:focus{background:rgba(0,0,0,.6);border-color:var(--pink-neon);color:#fff}
-.btn-neon{ background:linear-gradient(135deg,var(--pink-neon),#c41e7a); color:#fff;border:none;border-radius:999px;font-weight:700; padding:.85rem 1.4rem; box-shadow:var(--shadow-neon); width:100%; }
+/* Cabeçalho */
+.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);}
+.app-header .brand-script{font-family:'Dancing Script',cursive;color:var(--pink-neon);font-size:1.8rem;text-shadow:0 0 20px var(--pink-neon);}
+.icon-btn{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;color:#fff;width:42px;height:42px;display:flex;align-items:center;justify-content:center;}
 
-/* HEADER PADRÃO */
-.app-header{ display:flex; align-items:center; justify-content:space-between; padding:1rem; background:rgba(0,0,0,.6); backdrop-filter:blur(10px); z-index:50; }
-.app-header .app-title{font-weight:800;font-size:1.4rem;color:var(--pink-neon);}
+/* Menu Inferior */
+.bottom-nav{position:fixed;bottom:0;width:100%;z-index:60;display:flex;justify-content:space-around;padding:10px 0;background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);border-top:1px solid var(--glass-border);}
+.bottom-nav button{background:none;border:none;color:rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;font-size:0.7rem;font-weight:600;padding:0;transition:.2s;}
+.bottom-nav button i{font-size:1.4rem;margin-bottom:3px;}
+.bottom-nav button.active{color:var(--pink-neon);text-shadow:0 0 10px var(--pink-neon);}
 
-/* NAVEGAÇÃO PADRÃO */
-.bottom-nav{ position:fixed;bottom:0;width:100%;z-index:60; display:grid; grid-template-columns:repeat(5,1fr); background:rgba(0,0,0,.8);backdrop-filter:blur(20px); border-top:1px solid var(--glass-border); padding:.4rem 0; }
-.bottom-nav .nav-item{ background:none;border:none;color:rgba(255,255,255,.55); display:flex;flex-direction:column;align-items:center;gap:.15rem; font-size:.7rem;font-weight:600; }
-.bottom-nav .nav-item i{font-size:1.4rem}
-.bottom-nav .nav-item.active{color:var(--pink-neon);}
-.page{padding:1rem 1rem 100px; animation:fadeIn .35s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* Páginas */
+.page{padding:1rem 1rem 100px;display:none;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-/* === MECÂNICA DE CARREGAMENTO DE CONTEÚDO (Não mexa) === */
-.h-scroll{display:flex;gap:.7rem;overflow-x:auto;padding-bottom:.4rem;}.h-scroll::-webkit-scrollbar{display:none}
-.poster{ width:130px;border-radius:14px;overflow:hidden; background:var(--glass);border:1px solid var(--glass-border); cursor:pointer; }
-.poster .ratio{aspect-ratio:2/3;background:rgba(255,255,255,.05);}
-.poster img{width:100%;height:100%;object-fit:cover;display:block}
-.poster .meta{padding:.5rem .55rem}.poster .meta .t{font-size:.8rem;font-weight:600;line-height:1.2}
-.poster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.7rem}
-.ch-row{ display:flex;align-items:center;gap:.85rem;padding:.7rem .85rem;border-radius:16px; background:var(--glass);border:1px solid var(--glass-border);margin-bottom:.55rem;cursor:pointer; }
-.ch-logo{ width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.06); display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0; }
-.ch-logo img{max-width:80%;max-height:80%;object-fit:contain}
-.ch-info{flex:1}.ch-info .n{font-weight:600;font-size:.9rem}
-.ch-actions{display:flex;align-items:center;gap:.25rem}
+/* Hero / Shortcuts */
+.hero{width:100%;aspect-ratio:16/9;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(135deg,#3a0a4a,#06020d);margin-bottom:1.5rem;}
+.hero img{width:100%;height:100%;object-fit:cover;opacity:0.6;}
+.hero .overlay{position:absolute;bottom:20px;left:20px;font-size:1.8rem;font-weight:800;text-shadow:0 4px 10px rgba(0,0,0,0.8);}
 
-.player-wrap{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 0 40px rgba(255,45,146,.35)}
-.player-wrap video{width:100%;height:100%;display:block;background:#000}
-.video-js{width:100%;height:100%;font-family:inherit;background:#000;color:#fff}
-.video-js .vjs-big-play-button{background:var(--pink-neon);border:none;border-radius:50%;width:66px;height:66px;line-height:66px;margin-left:-33px;margin-top:-33px}
-.video-js .vjs-play-progress,.video-js .vjs-volume-level{background:var(--pink-neon)}
-.modal-content.glass-modal{ background:rgba(0,0,0,.9);border:1px solid var(--glass-border); border-radius:22px;color:#fff; }
-.modal-content.glass-modal .btn-close{filter:invert(1) brightness(1.5)}
-#playerModal .modal-dialog{max-width:980px}
+.shortcut-row{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:1.5rem;}
+.shortcut{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem;transition:.2s;cursor:pointer;}
+.shortcut:hover{transform:scale(1.02);border-color:var(--pink-neon);}
+.shortcut i{font-size:2rem;color:var(--pink-neon);margin-bottom:5px;}
 
-/* =========================================
-   DESIGN TEMPLATES (O que você vai escolher)
-   ========================================= */
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:1.5rem 0 0.8rem;}
+.section-head h3{font-size:1.1rem;font-weight:700;}
+.section-head a{color:var(--pink-neon);font-size:0.85rem;text-decoration:none;}
 
-/* === MODELO 1: CLÁSSICO ROXO/NEON === */
-{{MODELO_1_START}}
-.hero-clássico{ width:100%; aspect-ratio:16/9; border-radius:var(--radius); background:linear-gradient(135deg, #200033, #0d001a); margin-bottom:1.5rem; display:flex; flex-direction:column; justify-content:flex-end; padding:1.5rem; box-shadow:var(--shadow-neon); position:relative; overflow:hidden; }
-.hero-clássico h2{font-size:1.8rem;font-weight:800;text-shadow:0 4px 12px rgba(0,0,0,.7);margin:0}
-.hero-clássico .glow{ position:absolute; width:300px; height:300px; border-radius:50%; background:var(--pink-neon); filter:blur(80px); opacity:.2; top:-50px; right:-50px; }
-.shortcuts-clássico{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
-.shortcuts-clássico .btn-short{ aspect-ratio:1/1; background:var(--glass); border:1px solid var(--glass-border); border-radius:20px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; font-weight:700; color:#fff; }
-{{MODELO_1_END}}
+/* Cards e Listas */
+.poster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:15px;}
+.poster-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s;}
+.poster-card:hover{transform:translateY(-3px);border-color:var(--pink-neon);}
+.poster-card .img-box{aspect-ratio:2/3;background:rgba(0,0,0,0.3);}
+.poster-card img{width:100%;height:100%;object-fit:cover;}
+.poster-card .title{padding:8px;font-size:0.85rem;font-weight:600;text-align:center;}
 
-/* === MODELO 2: CARD LATERAL (Tela Cheia) === */
-{{MODELO_2_START}}
-.hero-lateral{ display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem; background:var(--glass); border-radius:var(--radius); border:1px solid var(--glass-border); padding:1.5rem; aspect-ratio:16/9; align-items:center; }
-.hero-lateral .info h2{font-size:2.2rem;font-weight:800;color:var(--pink-neon);line-height:1;margin-bottom:.5rem}
-.hero-lateral .info p{color:var(--txt-muted);font-size:.9rem}
-.hero-lateral .art{ width:100%; aspect-ratio:1/1; background:var(--bg-app); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:5rem; }
-.shortcuts-lateral{ display:flex; gap:1rem; flex-wrap:wrap; }
-.shortcuts-lateral .btn-short{ flex:1; min-width:80px; padding:.8rem; background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; text-align:center; font-weight:700; }
-{{MODELO_2_END}}
+.ch-row{display:flex;align-items:center;gap:15px;padding:12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;margin-bottom:10px;cursor:pointer;transition:.2s;}
+.ch-row:hover{border-color:var(--pink-neon);}
+.ch-logo{width:45px;height:45px;border-radius:10px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;}
+.ch-logo img{max-width:80%;max-height:80%;object-fit:contain;}
+.ch-info{flex:1;}.ch-info .name{font-weight:600;font-size:0.95rem;}
 
-/* === MODELO 3: MINIMALISTA (Clean) === */
-{{MODELO_3_START}}
-.hero-minimal{ text-align:center; padding:2rem 0; margin-bottom:1rem; }
-.hero-minimal h2{font-size:2rem; font-weight:800; color:#fff; }
-.hero-minimal h2 span{color:var(--pink-neon);}
-.hero-minimal p{color:var(--txt-muted); font-size:.9rem; margin-top:.3rem;}
-.shortcuts-minimal{ display:flex; justify-content:space-around; margin:1.5rem 0; gap:.5rem; }
-.shortcuts-minimal .btn-short{ flex:1; background:var(--glass); border:1px solid var(--glass-border); border-radius:16px; padding:1rem .5rem; text-align:center; font-weight:600; font-size:.9rem; }
-{{MODELO_3_END}}
-
+/* Player */
+.video-js{width:100%;height:100%;background:#000;}
+.video-js .vjs-big-play-button{background:var(--pink-neon);border:none;border-radius:50%;width:70px;height:70px;line-height:70px;margin-left:-35px;margin-top:-35px;box-shadow:0 0 20px var(--pink-neon);}
+.video-js .vjs-play-progress{background:var(--pink-neon);}
 </style>
 </head>
 <body>
-<div id="app" class="app-shell"></div>
+<div id="app"></div>
 
-<!-- Player / Overlays (Fixo) -->
-<div id="loading" class="loading-overlay" style="position:fixed;inset:0;z-index:9999;display:none;background:rgba(0,0,0,.8);align-items:center;justify-content:center"><div style="width:40px;height:40px;border:4px solid rgba(255,255,255,.1);border-top-color:var(--pink-neon);border-radius:50%;animation:spin .8s linear infinite"></div></div>
+<!-- Modais -->
 <div class="modal fade" id="playerModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content glass-modal">
-      <div class="modal-header border-0"><div class="player-title fw-bold" id="playerTitle">—</div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-      <div class="modal-body pt-2"><div class="player-wrap"><video id="videoEl" class="video-js vjs-big-play-centered" controls preload="auto" playsinline></video></div></div>
+    <div class="modal-content" style="background:rgba(0,0,0,0.95);border:1px solid var(--glass-border);color:#fff;">
+      <div class="modal-body p-0">
+        <div style="aspect-ratio:16/9;background:#000;">
+            <video id="videoEl" class="video-js vjs-big-play-centered" controls preload="auto" playsinline></video>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 'use strict';
-const $=(s,r=document)=>r.querySelector(s);
-const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const $=(s)=>document.querySelector(s);
+const $$=(s)=>[...document.querySelectorAll(s)];
 
-const store={ get(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}, del(k){try{localStorage.removeItem(k)}catch{}} };
+// DADOS INJETADOS PELO GERADOR
+const SERVER = "{{server_url}}";
+const USER = "{{xtream_user}}";
+const PASS = "{{xtream_pass}}";
+const APP_NAME = "{{app_name}}";
 
-/* === CONFIGURAÇÃO INJETADA PELO GERADOR === */
-const state={
-  creds:{ server:'{{server_url}}', user:'{{xtream_user}}', pass:'{{xtream_pass}}' },
-  favorites:store.get('favs',{live:[],vod:[],series:[]}),
-  history:store.get('hist',{progress:{}}),
-  cache:{liveCats:null,liveStreams:null,vodCats:null,vodStreams:null,seriesCats:null,series:null}
+// API Xtream
+const api = {
+    base() { return SERVER + '/player_api.php?username=' + USER + '&password=' + PASS; },
+    async call(action='') {
+        const r = await fetch(api.base() + (action ? '&action='+action : ''));
+        return r.json();
+    },
+    streamLive(id) { return SERVER + '/live/' + USER + '/' + PASS + '/' + id + '.m3u8'; },
+    streamVod(id) { return SERVER + '/movie/' + USER + '/' + PASS + '/' + id + '.mp4'; }
 };
 
-const api={
-  base(){return `${state.creds.server.replace(/\/+$/,'')}/player_api.php?username=${encodeURIComponent(state.creds.user)}&password=${encodeURIComponent(state.creds.pass)}`},
-  async call(action='',extra=''){ const url=`${api.base()}${action?`&action=${action}`:''}${extra}`; const r=await fetch(url); return r.json(); },
-  streamLive(id){return `${state.creds.server.replace(/\/+$/,'')}/live/${encodeURIComponent(state.creds.user)}/${encodeURIComponent(state.creds.pass)}/${id}.m3u8`},
-  streamVod(id){return `${state.creds.server.replace(/\/+$/,'')}/movie/${encodeURIComponent(state.creds.user)}/${encodeURIComponent(state.creds.pass)}/${id}.mp4`}
-};
+let state = { cache: { live: null, vod: null, series: null }, page: 'home' };
 
-async function loadLive(){ if(state.cache.liveStreams)return; const live=await api.call('get_live_streams'); state.cache.liveStreams=live||[]; }
-async function loadVod(){ if(state.cache.vodStreams)return; const vod=await api.call('get_vod_streams'); state.cache.vodStreams=vod||[]; }
-
-function mountApp(){
-  $('#app').innerHTML=`
-    <header class="app-header">
-      <div class="app-title">${state.creds.user}</div>
-      <button class="icon-btn" onclick="if(confirm('Sair?')){store.del('creds');location.reload()}"><i class="bi bi-box-arrow-right"></i></button>
-    </header>
-    <main id="view"></main>
-    <nav class="bottom-nav">
-      <button class="nav-item active" data-page="home"><i class="bi bi-house-heart-fill"></i><span>Início</span></button>
-      <button class="nav-item" data-page="live"><i class="bi bi-broadcast"></i><span>Canais</span></button>
-      <button class="nav-item" data-page="vod"><i class="bi bi-film"></i><span>Filmes</span></button>
-      <button class="nav-item" data-page="fav"><i class="bi bi-heart-fill"></i><span>Favs</span></button>
-      <button class="nav-item" data-page="perfil"><i class="bi bi-person"></i><span>Perfil</span></button>
-    </nav>`;
-  $$('.bottom-nav .nav-item').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+// Renderização Principal
+function mountApp() {
+    $('#app').innerHTML = `
+        <header class="app-header">
+            <button class="icon-btn" id="menuBtn"><i class="bi bi-list"></i></button>
+            <span class="brand-script">${APP_NAME}</span>
+            <button class="icon-btn" id="searchBtn"><i class="bi bi-search"></i></button>
+        </header>
+        <main id="mainContent"></main>
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-page="home"><i class="bi bi-house-heart-fill"></i><span>Início</span></button>
+            <button class="nav-item" data-page="live"><i class="bi bi-broadcast"></i><span>Canais</span></button>
+            <button class="nav-item" data-page="vod"><i class="bi bi-film"></i><span>Filmes</span></button>
+            <button class="nav-item" data-page="series"><i class="bi bi-collection-play-fill"></i><span>Séries</span></button>
+            <button class="nav-item" data-page="profile"><i class="bi bi-person-heart"></i><span>Perfil</span></button>
+        </nav>
+    `;
+    $$('.nav-item').forEach(b => b.addEventListener('click', () => navigate(b.dataset.page)));
 }
 
-function navigate(page){
-  $$('.bottom-nav .nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  const view=$('#view'); view.innerHTML='';
-  const wrap=document.createElement('div'); wrap.className='page'; view.append(wrap);
-  ({home:renderHome,live:renderLive,vod:renderVod,profile:renderProfile}[page])(wrap);
+function navigate(page) {
+    if(!['home','live','vod','series','profile'].includes(page)) page = 'home';
+    state.page = page;
+    $$('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+    
+    const main = $('#mainContent');
+    main.innerHTML = `<div class="page active" id="view-${page}"></div>`;
+    
+    const root = document.getElementById(`view-${page}`);
+    if(page === 'home') renderHome(root);
+    if(page === 'live') renderLive(root);
+    if(page === 'vod') renderVod(root);
+    if(page === 'series') renderSeries(root);
+    if(page === 'profile') root.innerHTML = `<h3 style="margin-top:20px">Bem-vindo(a), ${USER}</h3><p>Servidor: ${SERVER}</p>`;
 }
 
-function renderHome(root){
-  /* ====== CONTEÚDO DO MODELO ESCOLHIDO PELO GERADOR ====== */
-  root.innerHTML = `{{home_content}}`;
-  
-  // Eventos dos botões de atalho
-  root.querySelectorAll('.btn-short').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.go)));
+// HOME
+function renderHome(root) {
+    root.style.animation = 'fadeIn .4s ease';
+    root.innerHTML = `
+        <div class="hero">
+            <img src="https://i.ibb.co/dJfWsVB3/ac137247-31dd-4512-b457-550266c7698f.png" />
+            <div class="overlay">Aproveite<br/>seu tempo 💗</div>
+        </div>
+        <div class="shortcut-row">
+            <div class="shortcut" onclick="navigate('live')"><i class="bi bi-broadcast-pin"></i><span>CANAIS</span></div>
+            <div class="shortcut" onclick="navigate('vod')"><i class="bi bi-film"></i><span>FILMES</span></div>
+            <div class="shortcut" onclick="navigate('series')"><i class="bi bi-play-btn-fill"></i><span>SÉRIES</span></div>
+        </div>
+        <div class="section-head"><h3>Continue assistindo</h3></div>
+        <div class="poster-grid">
+            <div class="poster-card"><div class="img-box" style="background:#222"></div><div class="title">Último assistido</div></div>
+        </div>
+    `;
 }
 
-async function renderLive(root){
-  await loadLive();
-  let html='<div class="ch-row" style="opacity:0.6;padding:10px;text-align:center;justify-content:center">Carregando...</div>';
-  if(state.cache.liveStreams.length){ html=''; state.cache.liveStreams.slice(0,50).forEach(s=>{ html+=`
-      <div class="ch-row" onclick="playLive('${s.stream_id}','${s.name}')">
-        <div class="ch-logo">${s.stream_icon?'<img src="'+s.stream_icon+'" />':'<i class="bi bi-tv"></i>'}</div>
-        <div class="ch-info"><div class="n">${s.name}</div></div>
-      </div>`; });
-  } root.innerHTML=html;
+// CANAIS
+async function renderLive(root) {
+    if(!state.cache.live) {
+        state.cache.live = await api.call('get_live_streams');
+    }
+    let html = '<h2 class="mt-3 fw-bold">Canais</h2>';
+    if(state.cache.live && state.cache.live.length) {
+        state.cache.live.slice(0, 30).forEach(s => {
+            html += `
+                <div class="ch-row" onclick="playLive('${s.stream_id}', '${s.name}')">
+                    <div class="ch-logo">${s.stream_icon ? `<img src="${s.stream_icon}" />` : ''}</div>
+                    <div class="ch-info"><div class="name">${s.name}</div></div>
+                </div>
+            `;
+        });
+    } else {
+        html += '<p style="text-align:center;padding:40px;opacity:0.7;">Nenhum canal encontrado.</p>';
+    }
+    root.innerHTML = html;
 }
 
-async function renderVod(root){
-  await loadVod();
-  let html='<div class="poster-grid">';
-  if(state.cache.vodStreams.length){ state.cache.vodStreams.slice(0,30).forEach(s=>{ html+=`
-      <div class="poster" onclick="playVod('${s.stream_id}','${s.name}')">
-        <div class="ratio"><img src="${s.stream_icon||''}" /></div>
-        <div class="meta"><div class="t">${s.name}</div></div>
-      </div>`; });
-  } html+='</div>'; root.innerHTML=html;
+// FILMES
+async function renderVod(root) {
+    if(!state.cache.vod) {
+        state.cache.vod = await api.call('get_vod_streams');
+    }
+    let html = '<h2 class="mt-3 fw-bold">Filmes</h2><div class="poster-grid">';
+    if(state.cache.vod && state.cache.vod.length) {
+        state.cache.vod.slice(0, 30).forEach(s => {
+            html += `
+                <div class="poster-card" onclick="playVod('${s.stream_id}', '${s.name}')">
+                    <div class="img-box">${s.stream_icon ? `<img src="${s.stream_icon}" />` : ''}</div>
+                    <div class="title">${s.name}</div>
+                </div>
+            `;
+        });
+    } else {
+        html = '<p style="text-align:center;padding:40px;opacity:0.7;">Nenhum filme encontrado.</p>';
+    }
+    html += '</div>';
+    root.innerHTML = html;
 }
 
-function renderProfile(root){ root.innerHTML=`<div style="background:var(--glass);padding:20px;border-radius:16px"><strong>Conta:</strong> ${state.creds.user}</div>`; }
-
-let player=null;
-window.playLive=(id,name)=>{ const url=api.streamLive(id); openPlayer(name,url); };
-window.playVod=(id,name)=>{ const url=api.streamVod(id); openPlayer(name,url); };
-function openPlayer(title,url){
-  if(player){player.dispose();player=null;}
-  document.getElementById('playerTitle').textContent=title;
-  new bootstrap.Modal('#playerModal').show();
-  setTimeout(()=>{
-    player=videojs('videoEl',{controls:true,autoplay:true,fluid:true});
-    player.src({src:url,type:'application/x-mpegURL'});
-  },300);
+// SÉRIES
+async function renderSeries(root) {
+    if(!state.cache.series) {
+        state.cache.series = await api.call('get_series');
+    }
+    let html = '<h2 class="mt-3 fw-bold">Séries</h2><div class="poster-grid">';
+    if(state.cache.series && state.cache.series.length) {
+        state.cache.series.slice(0, 30).forEach(s => {
+            html += `
+                <div class="poster-card">
+                    <div class="img-box">${s.cover ? `<img src="${s.cover}" />` : ''}</div>
+                    <div class="title">${s.name}</div>
+                </div>
+            `;
+        });
+    } else {
+        html = '<p style="text-align:center;padding:40px;opacity:0.7;">Nenhuma série encontrada.</p>';
+    }
+    html += '</div>';
+    root.innerHTML = html;
 }
 
-async function boot(){ const data=await api.call(); if(data?.user_info?.auth!==0){ mountApp(); navigate('home'); } }
+// PLAYER
+let videoPlayer = null;
+window.playLive = (id, name) => { playVideo(api.streamLive(id), name); };
+window.playVod = (id, name) => { playVideo(api.streamVod(id), name); };
+
+function playVideo(url, title) {
+    if(videoPlayer) { videoPlayer.dispose(); videoPlayer = null; }
+    new bootstrap.Modal('#playerModal').show();
+    setTimeout(() => {
+        videoPlayer = videojs('videoEl', { controls: true, autoplay: true, fluid: true });
+        videoPlayer.src({ src: url, type: 'application/x-mpegURL' });
+    }, 300);
+}
+
+// INICIALIZAÇÃO
+async function boot() {
+    try {
+        const data = await api.call();
+        if(data?.user_info?.auth !== 0) {
+            mountApp();
+            navigate('home');
+        } else {
+            // Se falhar o login, exibe a tela de login no próprio app
+            $('#app').innerHTML = `
+                <div class="login-page">
+                    <div class="login-card">
+                        <div class="login-brand">Elas</div>
+                        <p style="text-align:center;color:#ccc;margin-bottom:20px;">Conecte-se ao servidor</p>
+                        <form id="loginForm">
+                            <input class="form-control mb-2" style="background:rgba(0,0,0,0.4);border:1px solid #333;color:#fff;padding:12px;" value="${SERVER}" readonly disabled />
+                            <input class="form-control" name="user" placeholder="Usuário" value="${USER}" required />
+                            <input class="form-control mt-2" name="pass" type="password" placeholder="Senha" value="${PASS}" required />
+                            <button class="btn btn-neon w-100 mt-3" style="background:var(--pink-neon);border:none;padding:12px;border-radius:20px;color:#fff;font-weight:bold;">ENTRAR</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            $('#loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                window.location.reload();
+            });
+        }
+    } catch(e) {
+        // Se não tiver servidor configurado
+        $('#app').innerHTML = `<div style="text-align:center;margin-top:40%;color:#aaa;">Verifique as configurações do servidor.</div>`;
+    }
+}
 boot();
 </script>
 </body>
