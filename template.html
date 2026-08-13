@@ -2,94 +2,110 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <meta name="theme-color" content="{{bg_color}}" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="{{app_name}}" />
 <title>{{app_name}}</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@8.17.4/dist/video-js.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/video.js@8.17.4/dist/video.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-:root{
-  --pink-neon: {{primary_color}};
-  --pink: {{primary_color}};
-  --bg-grad: radial-gradient(ellipse at top,#3a0a4a 0%,#1a0524 40%, {{bg_color}} 100%);
-  --glass: rgba(255,255,255,.06);
-  --glass-border: rgba(255,255,255,.10);
-  --shadow-neon: 0 0 24px rgba(255,45,146,.45);
-  --txt: #fff;
+:root {
+  --primary-color: {{primary_color}};
+  --bg-app: {{bg_color}};
+  --glass: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.10);
+  --shadow: 0 0 30px rgba(var(--primary-rgb), 0.3);
 }
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:'Inter',sans-serif;color:var(--txt);background:var(--bg-grad);padding-bottom:env(safe-area-inset-bottom);}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(255,45,146,.18),transparent 40%);}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif;}
+body{background:var(--bg-app);color:#fff;min-height:100vh;overflow-x:hidden;}
 
-/* Login */
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:url('https://i.ibb.co/dJfWsVB3/ac137247-31dd-4512-b457-550266c7698f.png') center/cover no-repeat;}
-.login-card{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--glass-border);border-radius:24px;padding:2rem;max-width:400px;width:100%;}
-.login-brand{text-align:center;font-family:'Dancing Script',cursive;font-size:3rem;color:var(--pink-neon);text-shadow:0 0 20px rgba(255,45,146,.7);}
+/* TELA DE LOGIN */
+.login-screen{position:fixed;inset:0;z-index:9999;background:var(--bg-app);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+.login-screen .logo{font-size:2rem;font-weight:800;color:var(--primary-color);text-shadow:var(--shadow);margin-bottom:30px;}
+.login-card{width:100%;max-width:380px;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:25px;}
+.login-card input{width:100%;padding:14px;background:rgba(0,0,0,0.4);border:1px solid var(--glass-border);border-radius:12px;color:#fff;margin-bottom:15px;outline:none;transition:0.3s;font-size:15px;}
+.login-card input:focus{border-color:var(--primary-color);}
+.login-card button{width:100%;padding:14px;background:var(--primary-color);border:none;border-radius:12px;color:#fff;font-weight:bold;font-size:1rem;cursor:pointer;transition:0.3s;box-shadow:var(--shadow);}
+.login-card button:hover{transform:translateY(-2px);}
 
-/* Cabeçalho */
-.app-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);}
-.app-header .brand-script{font-family:'Dancing Script',cursive;color:var(--pink-neon);font-size:1.8rem;text-shadow:0 0 20px var(--pink-neon);}
-.icon-btn{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;color:#fff;width:42px;height:42px;display:flex;align-items:center;justify-content:center;}
+/* APP */
+#app{display:none;}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:15px;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-bottom:1px solid var(--glass-border);position:sticky;top:0;z-index:50;}
+.app-header h1{font-size:1.2rem;font-weight:800;color:var(--primary-color);text-shadow:0 0 15px rgba(var(--primary-rgb),0.5);}
 
-/* Menu Inferior */
-.bottom-nav{position:fixed;bottom:0;width:100%;z-index:60;display:flex;justify-content:space-around;padding:10px 0;background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);border-top:1px solid var(--glass-border);}
-.bottom-nav button{background:none;border:none;color:rgba(255,255,255,.5);display:flex;flex-direction:column;align-items:center;font-size:0.7rem;font-weight:600;padding:0;transition:.2s;}
-.bottom-nav button i{font-size:1.4rem;margin-bottom:3px;}
-.bottom-nav button.active{color:var(--pink-neon);text-shadow:0 0 10px var(--pink-neon);}
+.bottom-nav{position:fixed;bottom:0;width:100%;background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);border-top:1px solid var(--glass-border);display:flex;justify-content:space-around;padding:8px 0;z-index:100;}
+.bottom-nav button{background:none;border:none;color:rgba(255,255,255,0.4);display:flex;flex-direction:column;align-items:center;font-size:11px;font-weight:600;cursor:pointer;transition:0.3s;}
+.bottom-nav button i{font-size:1.4rem;margin-bottom:4px;}
+.bottom-nav button.active{color:var(--primary-color);text-shadow:0 0 10px rgba(var(--primary-rgb),0.6);}
 
-/* Páginas */
-.page{padding:1rem 1rem 100px;display:none;}
-.page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.view{display:none;padding:15px 15px 100px;}
+.view.active{display:block;}
 
-/* Hero / Shortcuts */
-.hero{width:100%;aspect-ratio:16/9;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(135deg,#3a0a4a,#06020d);margin-bottom:1.5rem;}
-.hero img{width:100%;height:100%;object-fit:cover;opacity:0.6;}
-.hero .overlay{position:absolute;bottom:20px;left:20px;font-size:1.8rem;font-weight:800;text-shadow:0 4px 10px rgba(0,0,0,0.8);}
+.hero{position:relative;width:100%;aspect-ratio:16/9;border-radius:20px;overflow:hidden;margin-bottom:20px;background:linear-gradient(135deg,#1a0a28,var(--bg-app));}
+.hero .overlay{position:absolute;bottom:20px;left:20px;font-size:1.5rem;font-weight:800;text-shadow:0 4px 15px rgba(0,0,0,0.9);}
+.hero .overlay span{color:var(--primary-color);}
 
-.shortcut-row{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:1.5rem;}
-.shortcut{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem;transition:.2s;cursor:pointer;}
-.shortcut:hover{transform:scale(1.02);border-color:var(--pink-neon);}
-.shortcut i{font-size:2rem;color:var(--pink-neon);margin-bottom:5px;}
+.shortcuts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:25px;}
+.shortcut{background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:13px;transition:0.3s;cursor:pointer;}
+.shortcut:hover{transform:translateY(-3px);border-color:var(--primary-color);}
+.shortcut i{font-size:1.8rem;color:var(--primary-color);margin-bottom:6px;}
 
-.section-head{display:flex;justify-content:space-between;align-items:center;margin:1.5rem 0 0.8rem;}
-.section-head h3{font-size:1.1rem;font-weight:700;}
-.section-head a{color:var(--pink-neon);font-size:0.85rem;text-decoration:none;}
+.poster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;}
+.poster{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;overflow:hidden;transition:0.3s;cursor:pointer;}
+.poster:hover{border-color:var(--primary-color);}
+.poster .img-wrap{aspect-ratio:2/3;background:rgba(0,0,0,0.3);}
+.poster .img-wrap img{width:100%;height:100%;object-fit:cover;}
+.poster .title{padding:10px;font-size:13px;font-weight:600;text-align:center;}
 
-/* Cards e Listas */
-.poster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:15px;}
-.poster-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s;}
-.poster-card:hover{transform:translateY(-3px);border-color:var(--pink-neon);}
-.poster-card .img-box{aspect-ratio:2/3;background:rgba(0,0,0,0.3);}
-.poster-card img{width:100%;height:100%;object-fit:cover;}
-.poster-card .title{padding:8px;font-size:0.85rem;font-weight:600;text-align:center;}
+.ch-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;margin-bottom:10px;cursor:pointer;transition:0.2s;}
+.ch-row:hover{border-color:var(--primary-color);}
+.ch-row .logo{width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ch-row .logo img{max-width:80%;max-height:80%;object-fit:contain;}
+.ch-row .info{flex:1;}
+.ch-row .info .name{font-weight:600;font-size:14px;}
 
-.ch-row{display:flex;align-items:center;gap:15px;padding:12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;margin-bottom:10px;cursor:pointer;transition:.2s;}
-.ch-row:hover{border-color:var(--pink-neon);}
-.ch-logo{width:45px;height:45px;border-radius:10px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;}
-.ch-logo img{max-width:80%;max-height:80%;object-fit:contain;}
-.ch-info{flex:1;}.ch-info .name{font-weight:600;font-size:0.95rem;}
-
-/* Player */
 .video-js{width:100%;height:100%;background:#000;}
-.video-js .vjs-big-play-button{background:var(--pink-neon);border:none;border-radius:50%;width:70px;height:70px;line-height:70px;margin-left:-35px;margin-top:-35px;box-shadow:0 0 20px var(--pink-neon);}
-.video-js .vjs-play-progress{background:var(--pink-neon);}
+.video-js .vjs-big-play-button{background:var(--primary-color);border:none;border-radius:50%;width:65px;height:65px;line-height:65px;margin-left:-32px;margin-top:-32px;box-shadow:var(--shadow);}
+.video-js .vjs-play-progress{background:var(--primary-color);}
 </style>
 </head>
 <body>
-<div id="app"></div>
 
-<!-- Modais -->
+<!-- Tela de Login -->
+<div class="login-screen" id="loginScreen">
+    <div class="logo">{{app_name}}</div>
+    <div class="login-card">
+        <input id="inputServer" type="text" placeholder="URL do Servidor" value="{{server_url}}">
+        <input id="inputUser" type="text" placeholder="Usuário" value="{{xtream_user}}">
+        <input id="inputPass" type="password" placeholder="Senha" value="{{xtream_pass}}">
+        <button onclick="doLogin()"><i class="bi bi-box-arrow-in-right me-2"></i>Entrar</button>
+    </div>
+</div>
+
+<!-- Interface do App -->
+<div id="app">
+    <header class="app-header">
+        <div></div>
+        <h1>{{app_name}}</h1>
+        <button class="icon-btn" onclick="location.reload()" style="background:transparent;border:none;color:#fff;font-size:1.2rem;"><i class="bi bi-box-arrow-right"></i></button>
+    </header>
+    <div id="view-home" class="view active"></div>
+    <div id="view-live" class="view"></div>
+    <div id="view-vod" class="view"></div>
+    <div id="view-series" class="view"></div>
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-target="home"><i class="bi bi-house-heart-fill"></i><span>Início</span></button>
+        <button class="nav-item" data-target="live"><i class="bi bi-broadcast"></i><span>Canais</span></button>
+        <button class="nav-item" data-target="vod"><i class="bi bi-film"></i><span>Filmes</span></button>
+        <button class="nav-item" data-target="series"><i class="bi bi-collection-play-fill"></i><span>Séries</span></button>
+    </nav>
+</div>
+
 <div class="modal fade" id="playerModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content" style="background:rgba(0,0,0,0.95);border:1px solid var(--glass-border);color:#fff;">
+    <div class="modal-content" style="background:rgba(0,0,0,0.95);border:1px solid rgba(255,255,255,0.1);">
       <div class="modal-body p-0">
         <div style="aspect-ratio:16/9;background:#000;">
             <video id="videoEl" class="video-js vjs-big-play-centered" controls preload="auto" playsinline></video>
@@ -100,17 +116,22 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;background:ra
 </div>
 
 <script>
-'use strict';
 const $=(s)=>document.querySelector(s);
 const $$=(s)=>[...document.querySelectorAll(s)];
 
-// DADOS INJETADOS PELO GERADOR
-const SERVER = "{{server_url}}";
-const USER = "{{xtream_user}}";
-const PASS = "{{xtream_pass}}";
-const APP_NAME = "{{app_name}}";
+let SERVER, USER, PASS;
 
-// API Xtream
+function doLogin() {
+    SERVER = document.getElementById('inputServer').value.replace(/\/+$/, '');
+    USER = document.getElementById('inputUser').value;
+    PASS = document.getElementById('inputPass').value;
+
+    if(!SERVER || !USER || !PASS) { alert("Preencha todos os dados!"); return; }
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    mountApp();
+}
+
 const api = {
     base() { return SERVER + '/player_api.php?username=' + USER + '&password=' + PASS; },
     async call(action='') {
@@ -121,178 +142,120 @@ const api = {
     streamVod(id) { return SERVER + '/movie/' + USER + '/' + PASS + '/' + id + '.mp4'; }
 };
 
-let state = { cache: { live: null, vod: null, series: null }, page: 'home' };
+const cache = { live: null, vod: null, series: null };
 
-// Renderização Principal
+// Auto login se os dados foram passados pelo gerador
+if(document.getElementById('inputServer').value) doLogin();
+
 function mountApp() {
-    $('#app').innerHTML = `
-        <header class="app-header">
-            <button class="icon-btn" id="menuBtn"><i class="bi bi-list"></i></button>
-            <span class="brand-script">${APP_NAME}</span>
-            <button class="icon-btn" id="searchBtn"><i class="bi bi-search"></i></button>
-        </header>
-        <main id="mainContent"></main>
-        <nav class="bottom-nav">
-            <button class="nav-item active" data-page="home"><i class="bi bi-house-heart-fill"></i><span>Início</span></button>
-            <button class="nav-item" data-page="live"><i class="bi bi-broadcast"></i><span>Canais</span></button>
-            <button class="nav-item" data-page="vod"><i class="bi bi-film"></i><span>Filmes</span></button>
-            <button class="nav-item" data-page="series"><i class="bi bi-collection-play-fill"></i><span>Séries</span></button>
-            <button class="nav-item" data-page="profile"><i class="bi bi-person-heart"></i><span>Perfil</span></button>
-        </nav>
-    `;
-    $$('.nav-item').forEach(b => b.addEventListener('click', () => navigate(b.dataset.page)));
+    renderHome();
+    $$('.nav-item').forEach(b => {
+        b.addEventListener('click', function() {
+            $$('.nav-item').forEach(n => n.classList.remove('active'));
+            $$('.view').forEach(v => v.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('view-' + this.dataset.target).classList.add('active');
+            if(this.dataset.target === 'live') renderLive();
+            if(this.dataset.target === 'vod') renderVod();
+            if(this.dataset.target === 'series') renderSeries();
+        });
+    });
 }
 
-function navigate(page) {
-    if(!['home','live','vod','series','profile'].includes(page)) page = 'home';
-    state.page = page;
-    $$('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.page === page));
-    
-    const main = $('#mainContent');
-    main.innerHTML = `<div class="page active" id="view-${page}"></div>`;
-    
-    const root = document.getElementById(`view-${page}`);
-    if(page === 'home') renderHome(root);
-    if(page === 'live') renderLive(root);
-    if(page === 'vod') renderVod(root);
-    if(page === 'series') renderSeries(root);
-    if(page === 'profile') root.innerHTML = `<h3 style="margin-top:20px">Bem-vindo(a), ${USER}</h3><p>Servidor: ${SERVER}</p>`;
-}
-
-// HOME
-function renderHome(root) {
-    root.style.animation = 'fadeIn .4s ease';
-    root.innerHTML = `
+function renderHome() {
+    $('#view-home').innerHTML = `
         <div class="hero">
-            <img src="https://i.ibb.co/dJfWsVB3/ac137247-31dd-4512-b457-550266c7698f.png" />
-            <div class="overlay">Aproveite<br/>seu tempo 💗</div>
+            <div class="overlay">Aproveite<br/><span>seu tempo</span> <i class="bi bi-heart-fill" style="color:var(--primary-color)"></i></div>
         </div>
-        <div class="shortcut-row">
-            <div class="shortcut" onclick="navigate('live')"><i class="bi bi-broadcast-pin"></i><span>CANAIS</span></div>
-            <div class="shortcut" onclick="navigate('vod')"><i class="bi bi-film"></i><span>FILMES</span></div>
-            <div class="shortcut" onclick="navigate('series')"><i class="bi bi-play-btn-fill"></i><span>SÉRIES</span></div>
+        <div class="shortcuts">
+            <div class="shortcut" onclick="navigateTo('live')"><i class="bi bi-broadcast-pin"></i><span>CANAIS</span></div>
+            <div class="shortcut" onclick="navigateTo('vod')"><i class="bi bi-film"></i><span>FILMES</span></div>
+            <div class="shortcut" onclick="navigateTo('series')"><i class="bi bi-play-btn-fill"></i><span>SÉRIES</span></div>
         </div>
-        <div class="section-head"><h3>Continue assistindo</h3></div>
         <div class="poster-grid">
-            <div class="poster-card"><div class="img-box" style="background:#222"></div><div class="title">Último assistido</div></div>
+            <div class="poster"><div class="img-wrap" style="background:#1a1a2e"></div><div class="title">Em breve</div></div>
         </div>
     `;
 }
 
-// CANAIS
-async function renderLive(root) {
-    if(!state.cache.live) {
-        state.cache.live = await api.call('get_live_streams');
+async function renderLive() {
+    const el = document.getElementById('view-live');
+    el.innerHTML = '<p style="padding:20px;text-align:center;">Carregando canais...</p>';
+    if(!cache.live) cache.live = await api.call('get_live_streams');
+    if(!cache.live || !cache.live.length) {
+        el.innerHTML = '<p style="padding:30px;text-align:center;opacity:0.6;">Nenhum canal encontrado.</p>';
+        return;
     }
-    let html = '<h2 class="mt-3 fw-bold">Canais</h2>';
-    if(state.cache.live && state.cache.live.length) {
-        state.cache.live.slice(0, 30).forEach(s => {
-            html += `
-                <div class="ch-row" onclick="playLive('${s.stream_id}', '${s.name}')">
-                    <div class="ch-logo">${s.stream_icon ? `<img src="${s.stream_icon}" />` : ''}</div>
-                    <div class="ch-info"><div class="name">${s.name}</div></div>
-                </div>
-            `;
-        });
-    } else {
-        html += '<p style="text-align:center;padding:40px;opacity:0.7;">Nenhum canal encontrado.</p>';
-    }
-    root.innerHTML = html;
+    let html = '';
+    cache.live.slice(0, 50).forEach(s => {
+        html += `
+            <div class="ch-row" onclick="playLive('${s.stream_id}', '${s.name}')">
+                <div class="logo">${s.stream_icon ? `<img src="${s.stream_icon}" />` : '<i class="bi bi-tv" style="color:var(--primary-color)"></i>'}</div>
+                <div class="info"><div class="name">${s.name}</div></div>
+            </div>
+        `;
+    });
+    el.innerHTML = html;
 }
 
-// FILMES
-async function renderVod(root) {
-    if(!state.cache.vod) {
-        state.cache.vod = await api.call('get_vod_streams');
+async function renderVod() {
+    const el = document.getElementById('view-vod');
+    el.innerHTML = '<p style="padding:20px;text-align:center;">Carregando filmes...</p>';
+    if(!cache.vod) cache.vod = await api.call('get_vod_streams');
+    if(!cache.vod || !cache.vod.length) {
+        el.innerHTML = '<p style="padding:30px;text-align:center;opacity:0.6;">Nenhum filme encontrado.</p>';
+        return;
     }
-    let html = '<h2 class="mt-3 fw-bold">Filmes</h2><div class="poster-grid">';
-    if(state.cache.vod && state.cache.vod.length) {
-        state.cache.vod.slice(0, 30).forEach(s => {
-            html += `
-                <div class="poster-card" onclick="playVod('${s.stream_id}', '${s.name}')">
-                    <div class="img-box">${s.stream_icon ? `<img src="${s.stream_icon}" />` : ''}</div>
-                    <div class="title">${s.name}</div>
-                </div>
-            `;
-        });
-    } else {
-        html = '<p style="text-align:center;padding:40px;opacity:0.7;">Nenhum filme encontrado.</p>';
-    }
+    let html = '<div class="poster-grid">';
+    cache.vod.slice(0, 30).forEach(s => {
+        html += `
+            <div class="poster" onclick="playVod('${s.stream_id}', '${s.name}')">
+                <div class="img-wrap">${s.stream_icon ? `<img src="${s.stream_icon}" />` : ''}</div>
+                <div class="title">${s.name}</div>
+            </div>
+        `;
+    });
     html += '</div>';
-    root.innerHTML = html;
+    el.innerHTML = html;
 }
 
-// SÉRIES
-async function renderSeries(root) {
-    if(!state.cache.series) {
-        state.cache.series = await api.call('get_series');
+async function renderSeries() {
+    const el = document.getElementById('view-series');
+    el.innerHTML = '<p style="padding:20px;text-align:center;">Carregando séries...</p>';
+    if(!cache.series) cache.series = await api.call('get_series');
+    if(!cache.series || !cache.series.length) {
+        el.innerHTML = '<p style="padding:30px;text-align:center;opacity:0.6;">Nenhuma série encontrada.</p>';
+        return;
     }
-    let html = '<h2 class="mt-3 fw-bold">Séries</h2><div class="poster-grid">';
-    if(state.cache.series && state.cache.series.length) {
-        state.cache.series.slice(0, 30).forEach(s => {
-            html += `
-                <div class="poster-card">
-                    <div class="img-box">${s.cover ? `<img src="${s.cover}" />` : ''}</div>
-                    <div class="title">${s.name}</div>
-                </div>
-            `;
-        });
-    } else {
-        html = '<p style="text-align:center;padding:40px;opacity:0.7;">Nenhuma série encontrada.</p>';
-    }
+    let html = '<div class="poster-grid">';
+    cache.series.slice(0, 30).forEach(s => {
+        html += `
+            <div class="poster">
+                <div class="img-wrap">${s.cover ? `<img src="${s.cover}" />` : ''}</div>
+                <div class="title">${s.name}</div>
+            </div>
+        `;
+    });
     html += '</div>';
-    root.innerHTML = html;
+    el.innerHTML = html;
 }
 
-// PLAYER
-let videoPlayer = null;
-window.playLive = (id, name) => { playVideo(api.streamLive(id), name); };
-window.playVod = (id, name) => { playVideo(api.streamVod(id), name); };
+let player = null;
+window.playLive = (id, name) => { play(api.streamLive(id), name); };
+window.playVod = (id, name) => { play(api.streamVod(id), name); };
+window.navigateTo = (target) => {
+    const btn = document.querySelector(`.nav-item[data-target="${target}"]`);
+    if(btn) btn.click();
+};
 
-function playVideo(url, title) {
-    if(videoPlayer) { videoPlayer.dispose(); videoPlayer = null; }
+function play(url, title) {
+    if(player) { player.dispose(); player = null; }
     new bootstrap.Modal('#playerModal').show();
     setTimeout(() => {
-        videoPlayer = videojs('videoEl', { controls: true, autoplay: true, fluid: true });
-        videoPlayer.src({ src: url, type: 'application/x-mpegURL' });
+        player = videojs('videoEl', { controls: true, autoplay: true, fluid: true });
+        player.src({ src: url, type: 'application/x-mpegURL' });
     }, 300);
 }
-
-// INICIALIZAÇÃO
-async function boot() {
-    try {
-        const data = await api.call();
-        if(data?.user_info?.auth !== 0) {
-            mountApp();
-            navigate('home');
-        } else {
-            // Se falhar o login, exibe a tela de login no próprio app
-            $('#app').innerHTML = `
-                <div class="login-page">
-                    <div class="login-card">
-                        <div class="login-brand">Elas</div>
-                        <p style="text-align:center;color:#ccc;margin-bottom:20px;">Conecte-se ao servidor</p>
-                        <form id="loginForm">
-                            <input class="form-control mb-2" style="background:rgba(0,0,0,0.4);border:1px solid #333;color:#fff;padding:12px;" value="${SERVER}" readonly disabled />
-                            <input class="form-control" name="user" placeholder="Usuário" value="${USER}" required />
-                            <input class="form-control mt-2" name="pass" type="password" placeholder="Senha" value="${PASS}" required />
-                            <button class="btn btn-neon w-100 mt-3" style="background:var(--pink-neon);border:none;padding:12px;border-radius:20px;color:#fff;font-weight:bold;">ENTRAR</button>
-                        </form>
-                    </div>
-                </div>
-            `;
-            $('#loginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const fd = new FormData(e.target);
-                window.location.reload();
-            });
-        }
-    } catch(e) {
-        // Se não tiver servidor configurado
-        $('#app').innerHTML = `<div style="text-align:center;margin-top:40%;color:#aaa;">Verifique as configurações do servidor.</div>`;
-    }
-}
-boot();
 </script>
 </body>
 </html>
